@@ -17,7 +17,7 @@ def start(bot, update):
     update.message.reply_text('Let me serve you, my lord')
 
 
-def today(bot, update):
+def today(bot, update, offset=0):
     text = str(update.message.text).split(" ")
     if len(text) == 2:
         stu_num = text[1]
@@ -26,9 +26,13 @@ def today(bot, update):
         return
 
     if is_number(stu_num) and len(stu_num) == 10:
-        update.message.reply_text(get_courses(stu_num))
+        update.message.reply_text(get_courses(stu_num, offset=offset))
     else:
         update.message.reply_text("error: not a student number")
+
+
+def tomorrow(bot, update):
+    today(bot, update, offset=1)
 
 
 def error(bot, update, error):
@@ -40,6 +44,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("today", today))
+    dp.add_handler(CommandHandler("tomorrow", tomorrow))
     dp.add_error_handler(error)
     updater.start_polling()
     updater.idle()
