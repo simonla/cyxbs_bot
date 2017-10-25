@@ -18,4 +18,5 @@ header = {
 
 def get_courses(stuNum):
     response = requests.post(url, data=data)
-    return response.content.decode()[20:60]
+    print(response.content.decode())
+    return response.content.decode()
