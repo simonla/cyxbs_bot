@@ -18,10 +18,15 @@ def start(bot, update):
 
 
 def today(bot, update):
-    text = str(update.message.text)[-9:0]
-    print(text)
-    if is_number(text) and len(text) == 10:
-        update.message.reply_text(get_courses(text))
+    text = str(update.message.text).split(" ")
+    if len(text) == 2:
+        stu_num = text[1]
+    else:
+        update.message.reply_text("error: no student number")
+        return
+
+    if is_number(stu_num) and len(stu_num) == 10:
+        update.message.reply_text(get_courses(stu_num))
     else:
         update.message.reply_text("error: not a student number")
 
