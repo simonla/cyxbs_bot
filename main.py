@@ -29,6 +29,7 @@ def today(bot, update, args, offset=0):
             reply(update, get_courses(int(args[0]), offset=offset), stu)
             return
     except (IndexError, ValueError):
+        print(IndexError.args + ValueError.args)
         update.message.reply_text("eg: /(today|tomorrow) <your student number>")
 
 
