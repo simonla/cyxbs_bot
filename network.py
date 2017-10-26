@@ -34,11 +34,11 @@ def get_courses(stu_num, week=0, offset=0):
             if week == now_week:
                 has = True
         if has:
-            if is_on_time(resp_course['day'].strip('\''), -1+offset):
+            if is_on_time(resp_course['day'].strip('\''), -1 + offset):
                 this_week_course.append(
                     course(resp_course['course'], resp_course['teacher'], resp_course['classroom'],
                            resp_course['lesson']))
         else:
             "没有课哦"
 
-    return ' '.join(i.get_course() for i in this_week_course)
+    return ''.join(i.get_course() for i in this_week_course)
