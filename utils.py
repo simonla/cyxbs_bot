@@ -1,5 +1,7 @@
 from datetime import datetime, date, timedelta, timezone
 
+import pytz as pytz
+
 
 def is_number(s):
     try:
@@ -24,11 +26,12 @@ def get_token():
 
 def is_on_time(day, offset=0):
     week_list = ['星期一''星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
-    print('before')
-    print(datetime.now().today())
-    print('after')
-    print(datetime.now().astimezone(timezone(timedelta(hours=8))).today())
-    weekday = (datetime.now().astimezone(timezone(timedelta(hours=8))).weekday() + offset) % 7
+    print('befo')
+    print(datetime.utcnow().now())
+    print('afte')
+    print(datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Shanghai')))
+    weekday = (datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
+        pytz.timezone('Asia/Shanghai')).weekday() + offset) % 7
     return week_list[weekday] == day
 
 
