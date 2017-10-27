@@ -46,7 +46,7 @@ def bind(bot, update, args):
             bind_err(update)
             return
         bind_stu(update.message.from_user.id, int(args[0]))
-        update.message.reply_text('bind successfully')
+        update.message.reply_text('%s 绑定成功了喵' % args[0])
         return
 
     except (IndexError, ValueError):

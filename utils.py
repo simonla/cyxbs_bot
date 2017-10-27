@@ -38,6 +38,6 @@ def bind_err(update):
 
 def reply(update, text, stu):
     if text == '':
-        update.message.reply_text("喵喵喵，没有获取到哦，是不是学号输错了，你输入的是: " + stu)
+        update.message.reply_text('%s，没有课喵，睡个懒觉哦(●ˇ∀ˇ●)' % (str(stu),))
     else:
-        update.message.reply_text(text)
+        update.message.reply_text('👌 Hi, %s:\n\n' % (str(stu),) + text)
