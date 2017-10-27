@@ -24,7 +24,8 @@ def get_token():
 
 def is_on_time(day, offset=0):
     week_list = ['星期一''星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
-    weekday = (datetime.utcnow().astimezone(timezone(timedelta(hours=8))).weekday() + offset) % 7
+    print(datetime.now().today())
+    weekday = (datetime.now().astimezone(timezone(timedelta(hours=8))).weekday() + offset) % 7
     return week_list[weekday] == day
 
 

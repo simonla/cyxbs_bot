@@ -1,4 +1,4 @@
-class course(object):
+class Course(object):
     def __init__(self, name, teacher, classroom, time):
         self.name = name
         self.teacher = teacher
