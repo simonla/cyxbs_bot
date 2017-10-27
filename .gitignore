@@ -102,4 +102,6 @@ ENV/
 
 .idea
 
-user.db
+*.db
+
+*.out
