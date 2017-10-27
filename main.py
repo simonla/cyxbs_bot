@@ -28,8 +28,7 @@ def today(bot, update, args, offset=0):
             stu = args[0]
             reply(update, get_courses(int(args[0]), offset=offset), stu)
             return
-    except Exception as e:
-        logging.log('exception: ', e)
+    except (IndexError, ValueError):
         update.message.reply_text("eg: /(today|tomorrow) <your student number>")
 
 
@@ -41,7 +40,7 @@ def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
-def bind(bot, update, args): 
+def bind(bot, update, args):
     try:
         if not is_stu_num(args[0]):
             bind_err(update)
