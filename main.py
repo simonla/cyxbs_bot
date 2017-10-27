@@ -41,6 +41,7 @@ def error(bot, update, error):
 
 
 def bind(bot, update, args):
+    print(args[0])    
     try:
         if not is_stu_num(args[0]):
             bind_err(update)
