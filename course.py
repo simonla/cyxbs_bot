@@ -18,4 +18,4 @@ class Course(object):
             self.lesson = '21:00~22:40'
 
     def get_course(self):
-        return '⌚%s ==> %s @ %s\n\n' % (self.lesson, self.name, self.classroom)
+        return '%s ==> %s @ %s\n\n' % (self.lesson, self.name, self.classroom)

@@ -22,19 +22,9 @@ def get_courses(stu_num, week=0, offset=0):
     response = requests.post(url, data=data).json()
     if response['status'] != 200:
         return "network error!"
-
     now_week = response['nowWeek']
     courses = response['data']
-    this_week_course = []
-    for resp_course in courses:
-        has = False
-        for week in resp_course['week']:
-            if week == now_week:
-                has = True
-        if has:
-            if is_on_time(resp_course['day'].strip('\''), -1 + offset):
-                this_week_course.append(
-                    Course(resp_course['course'], resp_course['teacher'], resp_course['classroom'],
-                           resp_course['lesson']))
-
+    courses = filter(lambda x: now_week in x['week'] and is_on_time(x['day'].strip('\''), -1 + offset), courses)
+    this_week_course = list(map(lambda x: Course(x['course'], x['teacher'], x['classroom'],
+                                                 x['lesson']), courses))
     return ''.join(i.get_course() for i in this_week_course)
