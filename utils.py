@@ -21,10 +21,9 @@ def is_number(s):
 
 
 def is_on_time(day, offset=0):
-    week_list = ['星期一''星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
     weekday = (datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
         pytz.timezone('Asia/Shanghai')).weekday() + offset) % 7
-    return week_list[weekday] == day
+    return weekday == day
 
 
 def is_stu_num(stu_num):
@@ -32,11 +31,11 @@ def is_stu_num(stu_num):
 
 
 def error_hint_bind(update):
-    update.message.reply_text('eg: /bind <your student number> \n\nps. You can bind more than one student number')
+    update.message.reply_text('Usage: /bind <your student number> \n\nps. You can bind more than one student number')
 
 
 def error_hint_query(update):
-    update.message.reply_text("eg: /(today|tomorrow) <your student number> \n\n "
+    update.message.reply_text("Usage: /(today|tomorrow) <your student number> \n\n "
                               "Or you can go first to bind your student number by command /bind ")
 
 
@@ -54,7 +53,7 @@ def get_today_by_hour(hour, min=0):
     return datetime(today.year, today.month, today.day, hour, min)
 
 
-def get_tomorrow_by_hour(hour, min=0):
+def get_tomorrow_by_hour(hour, time_min=0):
     tomorrow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
         pytz.timezone('Asia/Shanghai')) + timedelta(days=1)
-    return datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour, min)
+    return datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour, time_min)

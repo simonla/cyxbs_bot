@@ -41,7 +41,10 @@ def error(bot, update, error):
 
 def bind(bot, update, args):
     try:
-        args = filter(lambda x: is_stu_num(x), args)
+        args = list(filter(lambda x: is_stu_num(x), args))
+        if len(args) == 0:
+            error_hint_bind(update)
+            return
         bind_stu(update.message.from_user.id, args)
         update.message.reply_text('绑定成功了喵')
         return
@@ -51,20 +54,30 @@ def bind(bot, update, args):
 
 def unsubscribe(bot, update, args, job_queue, chat_data):
     try:
-
+        for job in chat_data['jobs']:
+            job.schedule_removal()
+        del chat_data['jobs']
+        update.message.reply_text('订阅已取消')
     except(IndexError, ValueError):
         traceback.print_exc()
 
 
 def alarm(bot, job):
-    pass
+    if job.name == 'morning_job':
+        today(bot, job.context, {}, 0)
+        pass
+    elif job.name == 'night_job':
+        tomorrow(bot, job, {})
+        pass
 
 
 def subscribe(bot, update, args, job_queue, chat_data):
     try:
-        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7))
-        night_job = job_queue.run_daily(alarm, get_today_by_hour(22))
-        chat_data['job'] = [morning_job, night_job]
+        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7), name='morning_job',
+                                          context=update)
+        night_job = job_queue.run_daily(alarm, get_today_by_hour(22), name='night_job',
+                                        context=update)
+        chat_data['jobs'] = [morning_job, night_job]
     except (IndexError, ValueError):
         traceback.print_exc()
 
