@@ -4,7 +4,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
-from db import bind_stu, get_stu_num
+from db import bind_stu, get_stu_nums
+from key import get_token
 from network import get_courses
 from utils import *
 
@@ -20,14 +21,17 @@ def start(bot, update):
 
 def today(bot, update, args, offset=0):
     try:
-        stu_id = get_stu_num(update.message.from_user.id)
-        if len(args) == 0 and is_stu_num(stu_id):
-            reply(update, get_courses(stu_id, offset=offset), stu_id)
-            return
         if is_number(int(args[0])) and is_stu_num(args[0]):
             stu = args[0]
-            reply(update, get_courses(int(args[0]), offset=offset), stu)
+            reply(update, [{'stu_num': stu, 'course': get_courses(int(args[0]), offset=offset)}])
             return
+        stu_ids = get_stu_nums(update.message.from_user.id)
+        reply_arr = []
+        for stu in stu_ids:
+            if len(args) == 0 and is_stu_num(stu):
+                reply_arr.append({'stu_num': stu, 'course': get_courses(stu, offset=offset)})
+        reply(update, reply_arr)
+        return
     except (IndexError, ValueError):
         update.message.reply_text("eg: /(today|tomorrow) <your student number> \n\n "
                                   "Or you can go first to bind your student number by command /bind ")
@@ -43,11 +47,12 @@ def error(bot, update, error):
 
 def bind(bot, update, args):
     try:
-        if not is_stu_num(args[0]):
-            bind_err(update)
-            return
-        bind_stu(update.message.from_user.id, int(args[0]))
-        update.message.reply_text('%s 绑定成功了喵' % args[0])
+        for arg in args:
+            if not is_stu_num(arg):
+                bind_err(update)
+                return
+        bind_stu(update.message.from_user.id, args)
+        update.message.reply_text('绑定成功了喵')
         return
 
     except (IndexError, ValueError):

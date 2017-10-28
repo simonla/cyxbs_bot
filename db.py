@@ -4,36 +4,44 @@ import sqlite3
 def update_stu_num(uid, stu_num):
     conn = sqlite3.connect('user.db')
     cursor = conn.cursor()
-    cursor.execute('UPDATE stu SET stu_num = ? WHERE chat_id = ?', (stu_num, uid))
+    cursor.execute('DELETE FROM stu WHERE uid = ?', (uid,))
+    cursor.execute('UPDATE stu SET stu_num = ? WHERE uid= ?', (stu_num, uid))
     cursor.close()
     conn.commit()
     conn.close()
 
 
 def create_table(cursor):
-    cursor.execute('CREATE TABLE IF NOT EXISTS stu (chat_id INT (20) PRIMARY KEY , stu_num INT (20))')
+    cursor.execute(
+        'CREATE TABLE IF NOT EXISTS stu ('
+        'id  INTEGER PRIMARY KEY AUTOINCREMENT ,'
+        'uid INTEGER,'
+        'stu_num INTEGER'
+        ')')
 
 
 def bind_stu(uid, stu_num):
     conn = sqlite3.connect('user.db')
     cursor = conn.cursor()
     create_table(cursor)
-    if get_stu_num(uid) is None:
-        cursor.execute('INSERT INTO stu (chat_id,stu_num) VALUES (?,?)', (uid, stu_num))
+    db_stu = get_stu_nums(uid)
+    if len(db_stu) == 0:
+        for stu in stu_num:
+            cursor.execute('INSERT INTO stu (uid,stu_num) VALUES (?,?)', (uid, stu))
         cursor.close()
         conn.commit()
         conn.close()
-    if get_stu_num(uid) != stu_num:
+    else:
         update_stu_num(uid, stu_num)
 
 
-def get_stu_num(uid):
+def get_stu_nums(uid):
     conn = sqlite3.connect('user.db')
     cursor = conn.cursor()
     create_table(cursor)
-    res = None
-    for row in cursor.execute('SELECT stu_num FROM stu WHERE chat_id = ?', (uid,)):
-        res = row[0]
+    res = []
+    for row in cursor.execute('SELECT stu_num FROM stu WHERE uid = ?', (uid,)):
+        res = res.append(row)
         break
     cursor.close()
     conn.commit()

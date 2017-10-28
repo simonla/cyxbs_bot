@@ -20,10 +20,6 @@ def is_number(s):
     return False
 
 
-def get_token():
-    return "328109625:AAECcBvUoOr-J9rjt3x-L0MgFt4wfsG5XKM"
-
-
 def is_on_time(day, offset=0):
     week_list = ['星期一''星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
     weekday = (datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
@@ -39,8 +35,9 @@ def bind_err(update):
     update.message.reply_text('eg: /bind <your student number> \n\nps. You can bind more than one student number')
 
 
-def reply(update, text, stu):
-    if text == '':
-        update.message.reply_text('%s，没有课喵，睡个懒觉哦(●ˇ∀ˇ●)' % (str(stu),))
-    else:
-        update.message.reply_text('👌 Hi, %s:\n\n' % (str(stu),) + text)
+def reply(update, arr):
+    for stu in arr:
+        if stu['course'] == '':
+            update.message.reply_text('%s，没有课喵，睡个懒觉哦(●ˇ∀ˇ●)' % (str(stu['stu_num']),))
+        else:
+            update.message.reply_text('👌 Hi, %s:\n\n' % (str('stu_num'),) + stu['course'])
