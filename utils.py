@@ -46,3 +46,15 @@ def reply(update, arr):
             update.message.reply_text('%s，没有课喵，睡个懒觉哦(●ˇ∀ˇ●)' % (str(stu['stu_num']),))
         else:
             update.message.reply_text('👌 Hi, %s:\n\n' % (str(stu['stu_num']),) + stu['course'])
+
+
+def get_today_by_hour(hour, min=0):
+    today = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
+        pytz.timezone('Asia/Shanghai'))
+    return datetime(today.year, today.month, today.day, hour, min)
+
+
+def get_tomorrow_by_hour(hour, min=0):
+    tomorrow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
+        pytz.timezone('Asia/Shanghai')) + timedelta(days=1)
+    return datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour, min)

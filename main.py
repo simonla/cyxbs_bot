@@ -6,7 +6,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
 from db import bind_stu, get_stu_nums, query
-from key import get_token
+from key import get_token, get_test_token
 from network import get_courses
 from utils import *
 
@@ -49,13 +49,35 @@ def bind(bot, update, args):
         traceback.print_exc()
 
 
+def unsubscribe(bot, update, args, job_queue, chat_data):
+    try:
+
+    except(IndexError, ValueError):
+        traceback.print_exc()
+
+
+def alarm(bot, job):
+    pass
+
+
+def subscribe(bot, update, args, job_queue, chat_data):
+    try:
+        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7))
+        night_job = job_queue.run_daily(alarm, get_today_by_hour(22))
+        chat_data['job'] = [morning_job, night_job]
+    except (IndexError, ValueError):
+        traceback.print_exc()
+
+
 def main():
-    updater = Updater(get_token())
+    updater = Updater(get_test_token())
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("today", today, pass_args=True))
     dp.add_handler(CommandHandler("tomorrow", tomorrow, pass_args=True))
     dp.add_handler(CommandHandler("bind", bind, pass_args=True))
+    dp.add_handler(CommandHandler("subscribe", subscribe, pass_job_queue=True, pass_args=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("unsubscribe", unsubscribe, pass_job_queue=True, pass_args=True, pass_chat_data=True))
     dp.add_error_handler(error)
     updater.start_polling()
     updater.idle()
