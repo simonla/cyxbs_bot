@@ -1,7 +1,7 @@
 import requests
 
 from course import *
-from utils import is_on_time
+from utils import is_on_time, get_week
 
 url = 'https://wx.idsbllp.cn/redapi2/api/kebiao'
 
@@ -22,7 +22,7 @@ def get_courses(stu_num, week=0, offset=0):
     response = requests.post(url, data=data).json()
     if response['status'] != 200:
         return "network error!"
-    now_week = response['nowWeek']
+    now_week = get_week(response['nowWeek'],offset)
     courses = response['data']
     courses = filter(lambda x: now_week in x['week'] and is_on_time(x['hash_day'], offset), courses)
     this_week_course = list(map(lambda x: Course(x['course'], x['teacher'], x['classroom'], x['lesson']), courses))

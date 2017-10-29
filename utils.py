@@ -47,13 +47,22 @@ def reply(update, arr):
             update.message.reply_text('👌 Hi, %s:\n\n' % (str(stu['stu_num']),) + stu['course'])
 
 
-def get_today_by_hour(hour, min=0):
+def get_today_by_hour(hour, time_min=0):
     today = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
         pytz.timezone('Asia/Shanghai'))
-    return datetime(today.year, today.month, today.day, hour, min)
+    return datetime(today.year, today.month, today.day, hour, time_min)
 
 
 def get_tomorrow_by_hour(hour, time_min=0):
     tomorrow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
         pytz.timezone('Asia/Shanghai')) + timedelta(days=1)
     return datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour, time_min)
+
+
+def get_week(week, offset):
+    now_week = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(
+        pytz.timezone('Asia/Shanghai')).weekday()
+    if now_week + offset >= 7:
+        return week + 1
+    else:
+        return week
