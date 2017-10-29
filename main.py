@@ -25,7 +25,6 @@ def today(bot, update, args, offset=0):
         if len(args) == 0:
             query(get_stu_nums(update.message.from_user.id), offset, update)
         else:
-            args = filter(lambda x: is_stu_num(x), args)
             query(args, offset, update)
     except (IndexError, ValueError):
         traceback.print_exc()
