@@ -7,7 +7,7 @@ import logging
 
 from db import bind_stu, get_stu_nums, query
 from key import get_token, get_test_token
-from network import get_courses
+from network import get_courses, get_name_by_stu_num
 from utils import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -67,15 +67,15 @@ def alarm(bot, job):
         today(bot, job.context, {}, 0)
         pass
     elif job.name == 'night_job':
-        tomorrow(bot, job, {})
+        tomorrow(bot, job.context, {})
         pass
 
 
 def subscribe(bot, update, args, job_queue, chat_data):
     try:
-        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7), name='morning_job',
+        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7, 0), name='morning_job',
                                           context=update)
-        night_job = job_queue.run_daily(alarm, get_today_by_hour(22), name='night_job',
+        night_job = job_queue.run_daily(alarm, get_today_by_hour(22, 0), name='night_job',
                                         context=update)
         chat_data['jobs'] = [morning_job, night_job]
     except (IndexError, ValueError):

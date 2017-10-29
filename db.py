@@ -1,6 +1,6 @@
 import sqlite3
 
-from network import get_courses
+from network import get_courses, get_name_by_stu_num
 from utils import is_stu_num, reply
 
 
@@ -56,5 +56,11 @@ def query(stu_ids, offset, update):
     reply_arr = []
     for stu in stu_ids:
         if is_stu_num(stu):
-            reply_arr.append({'stu_num': stu, 'course': get_courses(stu, offset=offset)})
+            name = get_name_by_stu_num(int(stu))
+            if offset == 1:
+                hint = 'hi~ %s 这里是明天的课表' % (name,)
+            else:
+                hint = 'hi~ %s 这里是今天的课表' % (name,)
+            reply_arr.append({'stu_num': stu, 'course': get_courses(stu, offset=offset), 'hint': hint})
+
     reply(update, reply_arr)

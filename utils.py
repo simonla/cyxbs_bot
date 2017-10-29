@@ -42,9 +42,9 @@ def error_hint_query(update):
 def reply(update, arr):
     for stu in arr:
         if stu['course'] == '':
-            update.message.reply_text('%s，没有课喵，睡个懒觉哦(●ˇ∀ˇ●)' % (str(stu['stu_num']),))
+            update.message.reply_text('%s\n\n没有课喵 睡个懒觉哦(●ˇ∀ˇ●)' % (stu['hint'],))
         else:
-            update.message.reply_text('👌 Hi, %s:\n\n' % (str(stu['stu_num']),) + stu['course'])
+            update.message.reply_text('%s\n\n' % (stu['hint'],) + stu['course'])
 
 
 def get_today_by_hour(hour, time_min=0):
