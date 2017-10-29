@@ -56,7 +56,10 @@ def query(stu_ids, offset, update):
     reply_arr = []
     for stu in stu_ids:
         if is_stu_num(stu):
-            name = get_name_by_stu_num(int(stu))
+            if update.chat.type == 'private':
+                name = get_name_by_stu_num(int(stu))
+            else:
+                name = '***'
             if offset == 1:
                 hint = 'hi~ %s 这里是明天的课表' % (name,)
             else:
