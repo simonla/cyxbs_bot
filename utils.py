@@ -59,5 +59,5 @@ def get_week(week, offset):
     return week + 1 if now_week + offset >= 7 else week
 
 
-def check_time(datetime):
-    return datetime.timestamp() >= (datetime.utcnow() - timedelta(hours=8)).timestamp()
+def check_time(uncheck_datetime):
+    return uncheck_datetime.timestamp() >= (datetime.utcnow() - timedelta(hours=8)).timestamp()
