@@ -60,6 +60,4 @@ def get_week(week, offset):
 
 
 def check_time(uncheck_datetime):
-    print('now' + str(datetime.utcnow() + timedelta(hours=8)))
-    print('sub' + str(uncheck_datetime))
     return uncheck_datetime.timestamp() >= (datetime.utcnow() + timedelta(hours=8)).timestamp()
