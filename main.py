@@ -22,10 +22,8 @@ def start(bot, update):
 
 def today(bot, update, args, offset=0):
     try:
-        if len(args) == 0:
-            query(get_stu_nums(update.message.from_user.id), offset, update)
-        else:
-            query(args, offset, update)
+        query(get_stu_nums(update.message.from_user.id), offset, update) if len(args) == 0 else query(args, offset,
+                                                                                                      update)
     except (IndexError, ValueError):
         traceback.print_exc()
 
@@ -53,30 +51,40 @@ def bind(bot, update, args):
 
 def unsubscribe(bot, update, args, job_queue, chat_data):
     try:
+        if 'jobs' not in chat_data:
+            return
         for job in chat_data['jobs']:
             job.schedule_removal()
         del chat_data['jobs']
-        update.message.reply_text('订阅已取消')
+        if args[0] != 'no_text':
+            update.message.reply_text('订阅已取消')
     except(IndexError, ValueError):
         traceback.print_exc()
 
 
-def alarm(bot, job):
-    if job.name == 'morning_job':
-        today(bot, job.context, {}, 0)
-        pass
-    elif job.name == 'night_job':
-        tomorrow(bot, job.context, {})
-        pass
-
-
 def subscribe(bot, update, args, job_queue, chat_data):
     try:
-        morning_job = job_queue.run_daily(alarm, get_today_by_hour(7, 0), name='morning_job',
-                                          context=update)
-        night_job = job_queue.run_daily(alarm, get_today_by_hour(22, 0), name='night_job',
-                                        context=update)
-        chat_data['jobs'] = [morning_job, night_job]
+        unsubscribe(bot, update, ['no_text'], job_queue, chat_data)
+        morning_time = args[0] if len(args) >= 1 else 7
+        night_time = args[1] if len(args) >= 2 else 22
+        datetime_morning = get_today_by_hour(morning_time, 0)
+        datetime_night = get_tomorrow_by_hour(night_time, 0)
+        chat_data['jobs'] = []
+        if check_time(datetime_morning):
+            morning_job = job_queue.run_daily(lambda bot, job: today(bot, job.context, {}, 0),
+                                              get_today_by_hour(morning_time, 0),
+                                              context=update)
+            chat_data['jobs'].append(morning_job)
+        if check_time(datetime_night):
+            night_job = job_queue.run_daily(lambda bot, job: tomorrow(bot, job.context, {}),
+                                            get_today_by_hour(night_time, 0),
+                                            context=update)
+            chat_data['jobs'].append(night_job)
+        update.message.reply_text('订阅成功\n\n'
+                                  '你目前的时间设定是 %s 点和 %s 点\n\n'
+                                  '默认7点和22点提醒，可以自定义，比如设置8点和20点提醒，'
+                                  '就可以使用 /subscribe 8 20' % (
+                                      morning_time, night_time))
     except (IndexError, ValueError):
         traceback.print_exc()
 

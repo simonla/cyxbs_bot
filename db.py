@@ -56,13 +56,7 @@ def query(stu_ids, offset, update):
     reply_arr = []
     stu_ids = filter(lambda x: is_stu_num(x), stu_ids)
     for stu in stu_ids:
-        if update.message.chat.type == 'private':
-            name = get_name_by_stu_num(int(stu))
-        else:
-            name = '***'
-        if offset == 1:
-            hint = 'hi~ %s 这里是明天的课表' % (name,)
-        else:
-            hint = 'hi~ %s 这里是今天的课表' % (name,)
+        name = get_name_by_stu_num(int(stu)) if update.message.chat.type == 'private' else '***'
+        hint = 'hi~ %s 这里是明天的课表' % (name,) if offset == 1 else 'hi~ %s 这里是今天的课表' % (name,)
         reply_arr.append({'stu_num': stu, 'course': get_courses(stu, offset=offset), 'hint': hint})
     reply(update, reply_arr)
