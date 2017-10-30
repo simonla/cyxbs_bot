@@ -1,4 +1,4 @@
-from datetime import datetime, date, timedelta, timezone
+from datetime import datetime, timedelta
 
 import pytz as pytz
 
@@ -45,12 +45,12 @@ def reply(update, arr):
 
 
 def get_today_by_hour(hour, time_min=0):
-    today = datetime.utcnow() - timedelta(hours=8)
+    today = datetime.utcnow() + timedelta(hours=8)
     return datetime(today.year, today.month, today.day, hour, time_min)
 
 
 def get_tomorrow_by_hour(hour, time_min=0):
-    tomorrow = datetime.utcnow() + timedelta(days=1) - timedelta(hours=8)
+    tomorrow = datetime.utcnow() + timedelta(days=1) + timedelta(hours=8)
     return datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour, time_min)
 
 
@@ -60,4 +60,6 @@ def get_week(week, offset):
 
 
 def check_time(uncheck_datetime):
-    return uncheck_datetime.timestamp() >= (datetime.utcnow() - timedelta(hours=8)).timestamp()
+    print('now' + str(datetime.utcnow() + timedelta(hours=8)))
+    print('sub' + str(uncheck_datetime))
+    return uncheck_datetime.timestamp() >= (datetime.utcnow() + timedelta(hours=8)).timestamp()

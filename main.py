@@ -72,12 +72,12 @@ def subscribe(bot, update, args, job_queue, chat_data):
         chat_data['jobs'] = []
         if check_time(datetime_morning):
             morning_job = job_queue.run_daily(lambda bot, job: today(bot, job.context, {}, 0),
-                                              get_today_by_hour(morning_time, 0),
+                                              datetime_morning,
                                               context=update)
             chat_data['jobs'].append(morning_job)
         if check_time(datetime_night):
             night_job = job_queue.run_daily(lambda bot, job: tomorrow(bot, job.context, {}),
-                                            get_today_by_hour(night_time, 0),
+                                            datetime_night,
                                             context=update)
             chat_data['jobs'].append(night_job)
         update.message.reply_text('订阅成功\n\n'
@@ -90,7 +90,7 @@ def subscribe(bot, update, args, job_queue, chat_data):
 
 
 def main():
-    updater = Updater(get_token())
+    updater = Updater(get_test_token())
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("today", today, pass_args=True))
