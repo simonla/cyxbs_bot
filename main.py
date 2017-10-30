@@ -67,8 +67,8 @@ def subscribe(bot, update, args, job_queue, chat_data):
         unsubscribe(bot, update, ['no_text'], job_queue, chat_data)
         morning_time = args[0] if len(args) >= 1 else 7
         night_time = args[1] if len(args) >= 2 else 22
-        datetime_morning = get_today_by_hour(morning_time, 0)
-        datetime_night = get_tomorrow_by_hour(night_time, 0)
+        datetime_morning = get_today_by_hour(int(morning_time), 0)
+        datetime_night = get_tomorrow_by_hour(int(night_time), 0)
         chat_data['jobs'] = []
         if check_time(datetime_morning):
             morning_job = job_queue.run_daily(lambda bot, job: today(bot, job.context, {}, 0),
