@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 import traceback
 
+import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
 from db import bind_stu, get_stu_nums, query
 from key import get_token, get_test_token
-from network import get_courses, get_name_by_stu_num
+from network import *
 from utils import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -89,8 +90,23 @@ def subscribe(bot, update, args, job_queue, chat_data):
         traceback.print_exc()
 
 
+# '学号：%s\n姓名：%s\n性别：%s班级：%s\n学院：%s\n年级：%s\n专业：%s\n '
+#                                       '![](https://we.cqu.pt/api/others/photos.php?id=%s)' % (
+#                                           stu['xh'], stu['xm'], stu['bj'], stu['yxm'], stu['nj'], stu['zym'],
+#                                           stu['xh']
+
+def show(bot, update, args):
+    try:
+        for arg in args:
+            for stu in get_stu_infos_by_info(arg):
+                url = 'https://we.cqu.pt/api/others/photos.php?id=%s' % (stu['xh'])
+                update.message.reply_photo()
+    except(IndexError, ValueError):
+        traceback.print_exc()
+
+
 def main():
-    updater = Updater(get_token())
+    updater = Updater(get_test_token())
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("today", today, pass_args=True))
@@ -98,6 +114,7 @@ def main():
     dp.add_handler(CommandHandler("bind", bind, pass_args=True))
     dp.add_handler(CommandHandler("subscribe", subscribe, pass_job_queue=True, pass_args=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("unsubscribe", unsubscribe, pass_job_queue=True, pass_args=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("show", show, pass_args=True))
     dp.add_error_handler(error)
     updater.start_polling()
     updater.idle()
