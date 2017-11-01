@@ -90,17 +90,13 @@ def subscribe(bot, update, args, job_queue, chat_data):
         traceback.print_exc()
 
 
-# '学号：%s\n姓名：%s\n性别：%s班级：%s\n学院：%s\n年级：%s\n专业：%s\n '
-#                                       '![](https://we.cqu.pt/api/others/photos.php?id=%s)' % (
-#                                           stu['xh'], stu['xm'], stu['bj'], stu['yxm'], stu['nj'], stu['zym'],
-#                                           stu['xh']
-
 def show(bot, update, args):
     try:
         for arg in args:
             for stu in get_stu_infos_by_info(arg):
-                url = 'https://we.cqu.pt/api/others/photos.php?id=%s' % (stu['xh'])
-                update.message.reply_photo()
+                update.message.reply_text('姓名 -> %s\n学号 -> %s\n年级 -> %s\n班级 -> %s\n学院 -> %s\n专业 -> %s' % (
+                stu['xm'], stu['xh'], stu['nj'], stu['bj'], stu['yxm'], stu['zym']))
+                update.message.reply_photo(photo=get_photo(stu['xh']))
     except(IndexError, ValueError):
         traceback.print_exc()
 

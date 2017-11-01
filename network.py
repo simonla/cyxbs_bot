@@ -1,13 +1,15 @@
 import requests
+from PIL import Image
 
 from course import *
 from utils import is_on_time, get_week
+from io import BytesIO
 
 url_course = 'https://wx.idsbllp.cn/redapi2/api/kebiao'
 
 url_stu_info = 'https://we.cqu.pt/api/others/student.php?key='
 
-url_stu_show = ''
+url_photo = 'https://we.cqu.pt/api/others/photos.php?id='
 
 data = {
     'stuNum': -1,
@@ -36,6 +38,17 @@ def get_name_by_stu_num(stu_num):
     return resp['data']['rows'][0]['xm'] if resp['data']['total'] == 1 else '你是猪吗?学号都输错了'
 
 
-
 def get_stu_infos_by_info(info):
     return requests.get(url_stu_info + info).json()['data']['rows']
+
+
+def get_photo(stu_num_photo):
+    url = 'https://we.cqu.pt/api/others/photos.php?id=%s' % (stu_num_photo,)
+    photo_url = requests.get(url).json()['data']
+    photo = requests.get(photo_url).content
+    image = Image.open(BytesIO(photo))
+    bio = BytesIO(photo)
+    bio.name = 'image.jpeg'
+    image.save(bio, 'JPEG')
+    bio.seek(0)
+    return bio
