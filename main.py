@@ -102,7 +102,7 @@ def show(bot, update, args):
 
 
 def main():
-    updater = Updater(get_test_token())
+    updater = Updater(get_token())
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("today", today, pass_args=True))
