@@ -94,8 +94,9 @@ def show(bot, update, args):
     try:
         for arg in args:
             for stu in get_stu_infos_by_info(arg):
-                update.message.reply_text('姓名 -> %s\n\n学号 -> %s\n\n年级 -> %s\n\n班级 -> %s\n\n学院 -> %s\n\n专业 -> %s' % (
-                stu['xm'], stu['xh'], stu['nj'], stu['bj'], stu['yxm'], stu['zym']))
+                update.message.reply_text(
+                    '姓名 -> %s\n\n性别 -> %s\n\n学号 -> %s\n\n年级 -> %s\n\n班级 -> %s\n\n学院 -> %s\n\n专业 -> %s' % (
+                        stu['xm'], stu['xb'], stu['xh'], stu['nj'], stu['bj'], stu['yxm'], stu['zym']))
                 update.message.reply_photo(photo=get_photo(stu['xh']))
     except(IndexError, ValueError):
         traceback.print_exc()
