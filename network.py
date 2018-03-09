@@ -35,7 +35,7 @@ def get_courses(stu_num, week=0, offset=0):
 
 def get_name_by_stu_num(stu_num):
     resp = requests.get(url_stu_info + str(stu_num)).json()
-    return resp['data']['rows'][0]['xm'] if resp['data']['total'] == 1 else '你是猪吗?学号都输错了'
+    return resp['data']['rows'][0]['xm'] if resp['data']['total'] == 1 else '亲你学号输错啦'
 
 
 def get_stu_infos_by_info(info):
