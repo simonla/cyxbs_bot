@@ -1,0 +1,21 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.2/echarts.min.js"></script>
+
+<body>
+    <p id="log">log:</p>
+    <script type="text/javascript">
+
+        if (document !== 'undefined') {
+            console.log("listener keyevent")
+            document.addEventListener('keydown', logKey);
+
+            function logKey(e) {
+                log.textContent += ` ${e.code}`;
+                console.log(e)
+            }
+        } else {
+            console.log("no keyevent")
+        }
+    </script>
+</body>
